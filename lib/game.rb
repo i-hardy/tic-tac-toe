@@ -1,23 +1,15 @@
+require "player"
+
 class Game
-  attr_reader :grid
+  attr_reader :grid, :players, :current_turn
 
-  def initialize
-    @grid = [[nil,nil,nil],[nil,nil,nil],[nil,nil,nil]]
+  def initialize(grid, player_class: Player)
+    @grid = grid
+    @players = [player_class.new(:X), player_class.new(:O)]
+    @current_turn = players.first
   end
 
-  def place_x(x_coordinate, y_coordinate)
-    raise "That field is claimed" unless field_unclaimed?(x_coordinate, y_coordinate)
-    @grid[x_coordinate][y_coordinate] = "X"
-  end
-
-  def place_o(x_coordinate, y_coordinate)
-    raise "That field is claimed" unless field_unclaimed?(x_coordinate, y_coordinate)
-    @grid[x_coordinate][y_coordinate] = "O"
-  end
-
-  private
-
-  def field_unclaimed?(x_coordinate, y_coordinate)
-    @grid[x_coordinate][y_coordinate].nil?
+  def switch_turns
+    @current_turn = players.find { |player| player != current_turn }
   end
 end

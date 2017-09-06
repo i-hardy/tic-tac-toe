@@ -1,35 +1,37 @@
-require 'game'
+require "game"
 
 describe Game do
-  subject(:game) { described_class.new }
+  let(:grid) { double(:grid) }
+  let(:moomin) { double(:player) }
+  let(:tooticky) { double(:player) }
+  let(:player_class) { class_double("Player") }
+  subject(:game) { described_class.new(grid, player_class: player_class) }
+
+  before do
+    allow(player_class).to receive(:new).with(:X).and_return(moomin)
+    allow(player_class).to receive(:new).with(:O).and_return(tooticky)
+  end
 
   describe "initialization" do
-    it "initializes with an empty 3x3 grid" do
-      expect(game.grid).to eq [[nil,nil,nil],[nil,nil,nil],[nil,nil,nil]]
+    it "takes a grid object at initialization" do
+      expect(game.grid).to eq grid
+    end
+
+    it "creates two players at initialization and stores them in an array" do
+      expect(game.players).to eq [moomin, tooticky]
     end
   end
 
-  describe "#place_x" do
-    it "replaces the given array index with an x" do
-      game.place_x(0,0)
-      expect(game.grid).to eq [["X",nil,nil],[nil,nil,nil],[nil,nil,nil]]
-    end
-
-    it "raises an error if the given index is not currently nil" do
-      game.place_o(0,0)
-      expect{ game.place_x(0,0) }.to raise_error "That field is claimed"
+  describe "#current_turn" do
+    it "returns the player whose turn it is, defaulting to the first player" do
+      expect(game.current_turn).to eq moomin
     end
   end
 
-  describe "#place_o" do
-    it "replaces the given array index with an o" do
-      game.place_o(1,0)
-      expect(game.grid).to eq [[nil,nil,nil],["O",nil,nil],[nil,nil,nil]]
-    end
-
-    it "raises an error if the given index is not currently nil" do
-      game.place_x(0,0)
-      expect{ game.place_o(0,0) }.to raise_error "That field is claimed"
+  describe "#switch_turns" do
+    it "switches the turn" do
+      game.switch_turns
+      expect(game.current_turn).to eq tooticky
     end
   end
 end
