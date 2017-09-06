@@ -9,27 +9,95 @@ describe Grid do
     end
   end
 
-  describe "#place_x" do
-    it "replaces the given array index with an x" do
-      grid.place_x(0,0)
+  describe "#place" do
+    it "replaces the given array index with the given symbol" do
+      grid.place(:X, 0,0)
       expect(grid.game_grid).to eq [[:X,nil,nil],[nil,nil,nil],[nil,nil,nil]]
     end
 
     it "raises an error if the given index is not currently nil" do
-      grid.place_o(0,0)
-      expect{ grid.place_x(0,0) }.to raise_error "That field is claimed"
+      grid.place(:O, 0,0)
+      expect{ grid.place(:X, 0,0) }.to raise_error "That field is claimed"
     end
   end
 
-  describe "#place_o" do
-    it "replaces the given array index with an o" do
-      grid.place_o(1,0)
-      expect(grid.game_grid).to eq [[nil,nil,nil],[:O,nil,nil],[nil,nil,nil]]
+  describe "#full_row" do
+    it "returns the element when the grid has a full row of the same truthy element" do
+      grid.place(:X, 0,0)
+      grid.place(:X, 0,1)
+      grid.place(:X, 0,2)
+      expect(grid.full_row).to eq :X
     end
 
-    it "raises an error if the given index is not currently nil" do
-      grid.place_x(0,0)
-      expect{ grid.place_o(0,0) }.to raise_error "That field is claimed"
+    it "returns false if the grid only has a row with a mixture of elements" do
+      grid.place(:X, 0,0)
+      grid.place(:O, 0,1)
+      grid.place(:X, 0,2)
+      expect(grid.full_row).to be false
+    end
+
+    it "returns false if there is a row of only nil elements" do
+      expect(grid.full_row).to be false
+    end
+  end
+
+  describe "#full_column" do
+    it "returns the element when all rows of the grid have the same element at the same index" do
+      grid.place(:X, 0,0)
+      grid.place(:X, 1,0)
+      grid.place(:X, 2,0)
+      expect(grid.full_column).to eq :X
+    end
+
+    it "returns false if the grid only has a column with a mixture of elements" do
+      grid.place(:X, 0,0)
+      grid.place(:O, 1,0)
+      grid.place(:X, 2,0)
+      expect(grid.full_row).to be false
+    end
+
+    it "returns false if there is a column of only nil elements" do
+      expect(grid.full_column).to be false
+    end
+  end
+
+  describe "#full_diagonal" do
+    it "returns the element when there is a full diagonal line of that element descending left to right" do
+      grid.place(:X, 0,0)
+      grid.place(:X, 1,1)
+      grid.place(:X, 2,2)
+      expect(grid.full_diagonal).to eq :X
+    end
+
+    it "returns the element when there is a full diagonal line of that element descending right to left" do
+      grid.place(:X, 0,2)
+      grid.place(:X, 1,1)
+      grid.place(:X, 2,0)
+      expect(grid.full_diagonal).to eq :X
+    end
+
+    it "returns false if there is a diagonal of different elements" do
+      grid.place(:X, 0,2)
+      grid.place(:O, 1,1)
+      grid.place(:X, 2,0)
+      expect(grid.full_diagonal).to eq false
+    end
+
+    it "returns false if the diagonals are nil" do
+      expect(grid.full_diagonal).to eq false
+    end
+  end
+
+  describe "#full?" do
+    it "returns true if the grid is full and there is no winner" do
+      allow(grid).to receive(:game_grid) { [[:X, :X, :O],
+                                            [:O, :X, :X],
+                                            [:X, :O, :O]] }
+      expect(grid).to be_full
+    end
+
+    it "otherwise returns false" do
+      expect(grid).not_to be_full
     end
   end
 end
