@@ -101,3 +101,18 @@ describe Grid do
     end
   end
 end
+
+describe Array do
+  subject(:array) { described_class.new }
+
+  describe "#winning_row?" do
+    it "returns true if a given array contains only identical, truthy elements" do
+      3.times { array << :X }
+      expect(array).to be_winning_row
+    end
+
+    it "otherwise returns false" do
+      expect(array).not_to be_winning_row
+    end
+  end
+end
