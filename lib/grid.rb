@@ -11,15 +11,15 @@ class Grid
   end
 
   def full_row
-    get_full_row ? get_full_row.first : false
+    get_full_row ? get_full_row.first : nil
   end
 
   def full_column
-    get_full_column ? get_full_column.first : false
+    get_full_column ? get_full_column.first : nil
   end
 
   def full_diagonal
-    get_full_diagonal ? get_full_diagonal.first : false
+    get_full_diagonal ? get_full_diagonal.first : nil
   end
 
   def full?

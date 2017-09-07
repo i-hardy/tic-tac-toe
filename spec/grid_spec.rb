@@ -29,15 +29,15 @@ describe Grid do
       expect(grid.full_row).to eq :X
     end
 
-    it "returns false if the grid only has a row with a mixture of elements" do
+    it "returns nil if the grid only has a row with a mixture of elements" do
       grid.place(:X, 0,0)
       grid.place(:O, 0,1)
       grid.place(:X, 0,2)
-      expect(grid.full_row).to be false
+      expect(grid.full_row).to be nil
     end
 
-    it "returns false if there is a row of only nil elements" do
-      expect(grid.full_row).to be false
+    it "returns nil if there is a row of only nil elements" do
+      expect(grid.full_row).to be nil
     end
   end
 
@@ -49,15 +49,15 @@ describe Grid do
       expect(grid.full_column).to eq :X
     end
 
-    it "returns false if the grid only has a column with a mixture of elements" do
+    it "returns nil if the grid only has a column with a mixture of elements" do
       grid.place(:X, 0,0)
       grid.place(:O, 1,0)
       grid.place(:X, 2,0)
-      expect(grid.full_row).to be false
+      expect(grid.full_row).to be nil
     end
 
-    it "returns false if there is a column of only nil elements" do
-      expect(grid.full_column).to be false
+    it "returns nil if there is a column of only nil elements" do
+      expect(grid.full_column).to be nil
     end
   end
 
@@ -76,15 +76,15 @@ describe Grid do
       expect(grid.full_diagonal).to eq :X
     end
 
-    it "returns false if there is a diagonal of different elements" do
+    it "returns nil if there is a diagonal of different elements" do
       grid.place(:X, 0,2)
       grid.place(:O, 1,1)
       grid.place(:X, 2,0)
-      expect(grid.full_diagonal).to eq false
+      expect(grid.full_diagonal).to eq nil
     end
 
-    it "returns false if the diagonals are nil" do
-      expect(grid.full_diagonal).to eq false
+    it "returns nil if the diagonals are nil" do
+      expect(grid.full_diagonal).to eq nil
     end
   end
 
